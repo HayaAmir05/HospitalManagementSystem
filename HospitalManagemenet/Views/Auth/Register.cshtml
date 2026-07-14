@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register</title>
+</head>
+<body>
+
+    <h2>Hospital Management System</h2>
+    <h3>Create New Account</h3>
+
+    <form method="post" action="/Auth/Register">
+
+        <div>
+            <label>Name</label><br />
+            <input type="text" name="Name" required />
+        </div>
+
+        <br />
+
+        <div>
+            <label>Email</label><br />
+            <input type="email" name="Email" required />
+        </div>
+
+        <br />
+
+        <div>
+            <label>Password</label><br />
+            <input type="password" name="Password" required />
+        </div>
+
+        <br />
+
+        <div>
+            <label>Role</label><br />
+            <select name="Role">
+                <option value="Admin">Admin</option>
+                <option value="Receptionist">Receptionist</option>
+            </select>
+        </div>
+
+        <br />
+
+        <div>
+            <label>Contact</label><br />
+            <input type="text" name="Contact" required />
+        </div>
+
+        <br />
+
+        <button type="submit">Register</button>
+
+    </form>
+
+    <br />
+
+    <p>
+        Already have an account?
+        <a href="/Auth/Login">Login</a>
+    </p>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+﻿using HospitalManagemenet.Data;
+using HospitalManagemenet.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace HospitalManagemenet.Controllers
+{
+    public class AuthController : Controller
+    {
+        private readonly AppDbContext _context;
+
+        public AuthController(AppDbContext context)
+        {
+            _context = context;
+        }
+
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(User user)
+        {
+            // Login logic 
+            var userInDb = _context.Users.FirstOrDefault(u => u.Email == user.Email && u.Password == user.Password);
+            if (userInDb != null)
+            {
+                HttpContext.Session.SetString("UserName", user.Name);
+                HttpContext.Session.SetString("Role", user.Role);
+
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.ErrorMessage = "Invalid email or password";
+            return View();
+        }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Register(User user)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Users.Add(user);
+                _context.SaveChanges();
+                return RedirectToAction("Login");
+            }
+
+
+
+            return View(user);
+        }
+
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+             
+            return RedirectToAction("Login");
+
+        }
+    }
+}

@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+</head>
+<body>
+
+    <h2>Hospital Management System</h2>
+    <h3>User Login</h3>
+
+    <form method="post" action="/Auth/Login">
+
+        <div>
+            <label>Email</label><br />
+            <input type="email" name="email" required />
+        </div>
+
+        <br />
+
+        <div>
+            <label>Password</label><br />
+            <input type="password" name="password" required />
+        </div>
+
+        <br />
+
+        <button type="submit">Login</button>
+
+    </form>
+
+    <br />
+
+    <span style="color:red;">
+        @ViewBag.ErrorMessage
+    </span>
+
+    <br />
+    <br />
+
+    <p>
+        Don't have an account?
+        <a href="/Auth/Register">Register</a>
+    </p>
+
+</body>
+</html>
