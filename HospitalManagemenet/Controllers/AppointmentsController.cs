@@ -1,8 +1,10 @@
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using HospitalManagemenet.Models;
 using HospitalManagemenet.Data;
+using HospitalManagemenet.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 
 public class AppointmentsController : Controller
 {
@@ -14,21 +16,28 @@ public class AppointmentsController : Controller
     }
 
     // GET: APPOINTMENTS
-    public async Task<IActionResult> Index()    
+    public ActionResult Index()    
     {
-        return View(await _context.Appointments.ToListAsync());
+        var appointments = _context.Appointments
+        .Include(a => a.Patient)
+        .Include(a => a.Doctor)
+        .ToList();
+        return View(appointments);
     }
 
     // GET: APPOINTMENTS/Details/5
-    public async Task<IActionResult> Details(int? id)
+    public ActionResult Details(int? id)
     {
         if (id == null)
         {
             return NotFound();
         }
 
-        var appointment = await _context.Appointments
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var appointment = _context.Appointments
+            .Include(a => a.Patient)
+            .Include(a => a.Doctor)
+            .FirstOrDefault(m => m.Id == id);
+
         if (appointment == null)
         {
             return NotFound();
@@ -40,59 +49,123 @@ public class AppointmentsController : Controller
     // GET: APPOINTMENTS/Create
     public IActionResult Create()
     {
+        ViewBag.PatientId = new SelectList(_context.Patients, "Id", "Name");
+        ViewBag.DoctorId = new SelectList(_context.Doctors, "Id", "Name");
+        ViewBag.StatusList = new SelectList(new[] { "Pending", "Completed", "Cancelled" });
         return View();
     }
 
     // POST: APPOINTMENTS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,PatientId,DoctorId,AppointmentDate,Status,Patient,Doctor")] Appointment appointment)
+  
+    public ActionResult Create( Appointment appointment)
     {
-        if (ModelState.IsValid)
+
+        try
         {
-            _context.Add(appointment);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            appointment.createdBy = HttpContext.Session.GetString("UserName") ?? "System";
+            appointment.CreatedAt = DateTime.Now;
+            ModelState.Remove("createdBy");
+            ModelState.Remove("CreatedAt");
+            ModelState.Remove("Patient");   // navigation properties — remove stale validation on these too
+            ModelState.Remove("Doctor");
+
+            appointment.Status = "Pending";
+            ModelState.Remove("Status");
+
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(appointment);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+
+            }
+            else
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+
+                ModelState.AddModelError(string.Empty, "Validation failed: " + string.Join(" | ", errors));
+            }
         }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, "An error occurred while creating the appointment: " + ex.Message);
+        }
+
+        
         return View(appointment);
     }
 
     // GET: APPOINTMENTS/Edit/5
-    public async Task<IActionResult> Edit(int? id)
+    public ActionResult Edit(int? id)
     {
         if (id == null)
         {
             return NotFound();
         }
 
-        var appointment = await _context.Appointments.FindAsync(id);
+        var appointment = _context.Appointments.Find(id);
         if (appointment == null)
         {
             return NotFound();
         }
+
+        ViewBag.PatientId = new SelectList(_context.Patients, "Id", "Name", appointment.PatientId);
+        ViewBag.DoctorId = new SelectList(_context.Doctors, "Id", "Name", appointment.DoctorId);
+        ViewBag.StatusList = new SelectList(new[] { "Pending", "Completed", "Cancelled" }, appointment.Status);
+
         return View(appointment);
     }
 
     // POST: APPOINTMENTS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Id,PatientId,DoctorId,AppointmentDate,Status,Patient,Doctor")] Appointment appointment)
+
+    public ActionResult Edit(int id,  Appointment appointment)
     {
         if (id != appointment.Id)
         {
             return NotFound();
         }
 
+        var existing = _context.Appointments.AsNoTracking().FirstOrDefault(a => a.Id == id);
+        if (existing == null)
+        {
+            return NotFound();
+        }
+
+        appointment.createdBy = existing.createdBy;
+        appointment.CreatedAt = existing.CreatedAt;
+
+        ModelState.Remove("createdBy");
+        ModelState.Remove("CreatedAt");
+        ModelState.Remove("Patient");
+        ModelState.Remove("Doctor");
+
+        // New rule: date can only stay the same or move forward, never backward, relative to its ORIGINAL value
+        if (appointment.AppointmentDate.Date < existing.AppointmentDate.Date)
+        {
+            ModelState.AddModelError("AppointmentDate", "Appointment date cannot be moved to an earlier date than originally scheduled. You can only delay, not reschedule backward.");
+        }
+
+        if (appointment.AppointmentDate.Date < DateTime.Today && appointment.Status == "Pending")
+        {
+            ModelState.AddModelError("Status", "Past appointments cannot remain Pending — mark as Completed or Cancelled.");
+        }
+
+        
+
         if (ModelState.IsValid)
         {
             try
             {
                 _context.Update(appointment);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -107,19 +180,25 @@ public class AppointmentsController : Controller
             }
             return RedirectToAction(nameof(Index));
         }
+
+        ViewBag.PatientId = new SelectList(_context.Patients, "Id", "Name", appointment.PatientId);
+        ViewBag.DoctorId = new SelectList(_context.Doctors, "Id", "Name", appointment.DoctorId);
+        ViewBag.StatusList = new SelectList(new[] { "Pending", "Completed", "Cancelled" }, appointment.Status);
         return View(appointment);
     }
-
     // GET: APPOINTMENTS/Delete/5
-    public async Task<IActionResult> Delete(int? id)
+    public ActionResult Delete(int? id)
     {
         if (id == null)
         {
             return NotFound();
         }
 
-        var appointment = await _context.Appointments
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var appointment = _context.Appointments
+            .Include(a => a.Patient)
+            .Include(a => a.Doctor)
+            .FirstOrDefault(m => m.Id == id);
+
         if (appointment == null)
         {
             return NotFound();
@@ -130,16 +209,16 @@ public class AppointmentsController : Controller
 
     // POST: APPOINTMENTS/Delete/5
     [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? id)
-    {
-        var appointment = await _context.Appointments.FindAsync(id);
+   
+    public ActionResult DeleteConfirmed(int? id)
+    { 
+        var appointment =  _context.Appointments.Find(id);
         if (appointment != null)
         {
             _context.Appointments.Remove(appointment);
         }
 
-        await _context.SaveChangesAsync();
+         _context.SaveChanges();
         return RedirectToAction(nameof(Index));
     }
 

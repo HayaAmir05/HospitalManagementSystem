@@ -19,14 +19,14 @@ namespace HospitalManagemenet.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(User user)
+        public IActionResult Login(LoginViewModel user)
         {
             // Login logic 
             var userInDb = _context.Users.FirstOrDefault(u => u.Email == user.Email && u.Password == user.Password);
             if (userInDb != null)
             {
-                HttpContext.Session.SetString("UserName", user.Name);
-                HttpContext.Session.SetString("Role", user.Role);
+                HttpContext.Session.SetString("UserName", userInDb.Name);
+                HttpContext.Session.SetString("Role", userInDb.Role);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -42,6 +42,11 @@ namespace HospitalManagemenet.Controllers
         [HttpPost]
         public IActionResult Register(User user)
         {
+            user.createdBy = "Self-Registered";
+            user.CreatedAt = DateTime.Now;
+            ModelState.Remove("createdBy");
+            ModelState.Remove("CreatedAt");
+
             if (ModelState.IsValid)
             {
                 _context.Users.Add(user);

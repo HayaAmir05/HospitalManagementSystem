@@ -1,8 +1,9 @@
 
+using HospitalManagemenet.Data;
+using HospitalManagemenet.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using HospitalManagemenet.Models;
-using HospitalManagemenet.Data;
+using System.Numerics;
 
 public class PatientsController : Controller
 {
@@ -14,21 +15,21 @@ public class PatientsController : Controller
     }
 
     // GET: PATIENTS
-    public async Task<IActionResult> Index()    
+    public ActionResult Index()    
     {
-        return View(await _context.Patients.ToListAsync());
+        return View( _context.Patients.ToList());
     }
 
     // GET: PATIENTS/Details/5
-    public async Task<IActionResult> Details(int? id)
+    public ActionResult Details(int? id)
     {
         if (id == null)
         {
             return NotFound();
         }
 
-        var patient = await _context.Patients
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var patient =  _context.Patients
+            .FirstOrDefault(m => m.Id == id);
         if (patient == null)
         {
             return NotFound();
@@ -38,36 +39,65 @@ public class PatientsController : Controller
     }
 
     // GET: PATIENTS/Create
-    public IActionResult Create()
+    public ActionResult Create()
     {
         return View();
     }
 
     // POST: PATIENTS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+   
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Age,Gender,Disease,Address,Appointments,Id,Name,Contact")] Patient patient)
+   
+    public ActionResult Create(Patient patient)
     {
-        if (ModelState.IsValid)
+        try
         {
-            _context.Add(patient);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            
+            patient.createdBy = HttpContext.Session.GetString("UserName") ?? "System";
+            patient.CreatedAt = DateTime.Now;
+
+            // Because these are set AFTER model binding/validation already ran,
+            // remove any stale validation errors that were recorded for them
+            ModelState.Remove("createdBy");
+            ModelState.Remove("CreatedAt");
+
+            if (patient.Age < 0 || patient.Age > 130)
+            {
+                ModelState.AddModelError("Age", "Patient's age must be between 0 and 130.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(patient);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+
+                ModelState.AddModelError(string.Empty, "Validation failed: " + string.Join(" | ", errors));
+            }
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, "An error occurred while creating the patient: " + ex.Message);
         }
         return View(patient);
     }
 
     // GET: PATIENTS/Edit/5
-    public async Task<IActionResult> Edit(int? id)
+    public ActionResult Edit(int? id)
     {
         if (id == null)
         {
             return NotFound();
         }
 
-        var patient = await _context.Patients.FindAsync(id);
+        var patient =  _context.Patients.Find(id);
         if (patient == null)
         {
             return NotFound();
@@ -76,23 +106,33 @@ public class PatientsController : Controller
     }
 
     // POST: PATIENTS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+   
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Age,Gender,Disease,Address,Appointments,Id,Name,Contact")] Patient patient)
+
+    public ActionResult Edit(int? id,Patient patient)
     {
         if (id != patient.Id)
         {
             return NotFound();
         }
 
+        Patient patientInDb = _context.Patients.AsNoTracking().FirstOrDefault(p => p.Id == patient.Id);
+        patient.createdBy = patientInDb.createdBy;
+        patient.CreatedAt = patientInDb.CreatedAt;
+
+        ModelState.Remove("createdBy");
+        ModelState.Remove("CreatedAt");
+
+        if (patient.Age < 0 || patient.Age > 130)
+        {
+            ModelState.AddModelError("Age", "Patient's age must be between 0 and 130.");
+        }
         if (ModelState.IsValid)
         {
             try
             {
                 _context.Update(patient);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -111,15 +151,15 @@ public class PatientsController : Controller
     }
 
     // GET: PATIENTS/Delete/5
-    public async Task<IActionResult> Delete(int? id)
+    public ActionResult Delete(int? id)
     {
         if (id == null)
         {
             return NotFound();
         }
 
-        var patient = await _context.Patients
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var patient =  _context.Patients
+            .FirstOrDefault(m => m.Id == id);
         if (patient == null)
         {
             return NotFound();
@@ -130,18 +170,18 @@ public class PatientsController : Controller
 
     // POST: PATIENTS/Delete/5
     [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? id)
+    
+    public ActionResult DeleteConfirmed(int? id)
     {
-        var patient = await _context.Patients.FindAsync(id);
+        var patient =  _context.Patients.Find(id);
         if (patient != null)
         {
             _context.Patients.Remove(patient);
         }
 
-        await _context.SaveChangesAsync();
+        _context.SaveChanges();
         return RedirectToAction(nameof(Index));
-    }
+    } 
 
     private bool PatientExists(int? id)
     {

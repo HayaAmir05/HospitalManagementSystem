@@ -1,0 +1,63 @@
+@model IEnumerable<HospitalManagemenet.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Appointments";
+}
+
+<h1>Appointments</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+<div class="table-responsive">
+<table class="table">
+    <thead>
+        <tr>
+            <th>Patient</th>
+            <th>Doctor</th>
+            <th>@Html.DisplayNameFor(model => model.AppointmentDate)</th>
+            <th>@Html.DisplayNameFor(model => model.Status)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Patient?.Name</td>
+                <td>@item.Doctor?.Name</td>
+                <td>@Html.DisplayFor(modelItem => item.AppointmentDate)</td>
+                    <td>
+                        <span class="badge @(item.Status switch
+                              {
+                                  "Pending" => "bg-warning",
+                                  "Completed" => "bg-success",
+                                  "Cancelled" => "bg-danger",
+                                  _ => "bg-secondary"
+                              })">@item.Status</span>
+                        @if (item.AppointmentDate.Date < DateTime.Today && item.Status == "Pending")
+                        {
+                            <span class="badge bg-danger ms-1">⚠ Needs Update</span>
+                        }
+                    </td>
+
+                
+                
+                <td>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-soft-primary">Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-soft-secondary">Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-soft-danger">Delete</a>
+                        </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+</div>
+<div class="mt-3">
+    <a asp-controller="Home" asp-action="Index" class="btn btn-soft-primary">
+        ← Back to Home Page
+    </a>
+</div>

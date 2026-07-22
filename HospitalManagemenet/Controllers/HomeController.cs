@@ -1,3 +1,4 @@
+using HospitalManagemenet.Data;
 using HospitalManagemenet.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -6,20 +7,23 @@ namespace HospitalManagemenet.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly AppDbContext _context;
+        public HomeController(AppDbContext context) => _context = context;
+
         public IActionResult Index()
         {
-            return View();
-        }
+            var userName = HttpContext.Session.GetString("UserName");
+            if (string.IsNullOrEmpty(userName))
+                return RedirectToAction("Login", "Auth");
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+            ViewBag.UserName = userName;
+            ViewBag.Role = HttpContext.Session.GetString("Role");
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            ViewBag.PatientCount = _context.Patients.Count();
+            ViewBag.DoctorCount = _context.Doctors.Count();
+            ViewBag.AppointmentCount = _context.Appointments.Count();
+
+            return View();
         }
     }
 }

@@ -27,6 +27,8 @@ namespace HospitalManagemenet.Models
 
         [ForeignKey("DoctorId")]
         public Doctor Doctor { get; set; } = null!;
+        public string createdBy { get; set; } 
+        public DateTime CreatedAt { get; set; }
     }
 }
 

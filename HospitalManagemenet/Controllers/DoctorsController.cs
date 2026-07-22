@@ -14,21 +14,21 @@ public class DoctorsController : Controller
     }
 
     // GET: DOCTORS
-    public async Task<IActionResult> Index()    
+    public  ActionResult Index()    
     {
-        return View(await _context.Doctors.ToListAsync());
+        return View(_context.Doctors.ToList());
     }
 
     // GET: DOCTORS/Details/5
-    public async Task<IActionResult> Details(int? id)
+    public ActionResult Details(int? id)
     {
         if (id == null)
         {
             return NotFound();
         }
 
-        var doctor = await _context.Doctors
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var doctor = _context.Doctors
+            .FirstOrDefault(m => m.Id == id);
         if (doctor == null)
         {
             return NotFound();
@@ -38,36 +38,65 @@ public class DoctorsController : Controller
     }
 
     // GET: DOCTORS/Create
-    public IActionResult Create()
+    public ActionResult Create()
     {
         return View();
     }
 
     // POST: DOCTORS/Create
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Specialization,Email,Experience,Appointments,Id,Name,Contact")] Doctor doctor)
+    public ActionResult Create(Doctor doctor)
     {
-        if (ModelState.IsValid)
+        try
         {
-            _context.Add(doctor);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            // Set audit fields server-side — never trust these from the form
+            doctor.createdBy = HttpContext.Session.GetString("UserName") ?? "System";
+            doctor.CreatedAt = DateTime.Now;
+
+            // Because these are set AFTER model binding/validation already ran,
+            // remove any stale validation errors that were recorded for them
+            ModelState.Remove("createdBy");
+            ModelState.Remove("CreatedAt");
+            if (doctor.Age < 23 || doctor.Age > 80)
+            {
+                ModelState.AddModelError("Age", "Doctor's age must be between 23 and 80.");
+            }
+
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(doctor);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+
+                ModelState.AddModelError(string.Empty, "Validation failed: " + string.Join(" | ", errors));
+            }
         }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, "An error occurred while creating the doctor: " + ex.Message);
+        }
+
         return View(doctor);
     }
 
     // GET: DOCTORS/Edit/5
-    public async Task<IActionResult> Edit(int? id)
+    public ActionResult Edit(int? id)
     {
         if (id == null)
         {
             return NotFound();
         }
 
-        var doctor = await _context.Doctors.FindAsync(id);
+        var doctor = _context.Doctors.Find(id);
         if (doctor == null)
         {
             return NotFound();
@@ -76,23 +105,32 @@ public class DoctorsController : Controller
     }
 
     // POST: DOCTORS/Edit/5
-    // To protect from overposting attacks, enable the specific properties you want to bind to.
-    // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    
     [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? id, [Bind("Specialization,Email,Experience,Appointments,Id,Name,Contact")] Doctor doctor)
+   
+    public ActionResult Edit(int? id, Doctor doctor)
     {
         if (id != doctor.Id)
         {
             return NotFound();
         }
+        Doctor doctorInDb = _context.Doctors.AsNoTracking().FirstOrDefault(d => d.Id == doctor.Id);
+        doctor.createdBy = doctorInDb.createdBy;
+        doctor.CreatedAt = doctorInDb.CreatedAt;
 
+        ModelState.Remove("createdBy");
+        ModelState.Remove("CreatedAt");
+
+        if (doctor.Age < 23 || doctor.Age > 80)
+        {
+            ModelState.AddModelError("Age", "Doctor's age must be between 23 and 80.");
+        }
         if (ModelState.IsValid)
         {
             try
             {
                 _context.Update(doctor);
-                await _context.SaveChangesAsync();
+                _context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -111,15 +149,15 @@ public class DoctorsController : Controller
     }
 
     // GET: DOCTORS/Delete/5
-    public async Task<IActionResult> Delete(int? id)
+    public ActionResult Delete(int? id)
     {
         if (id == null)
         {
             return NotFound();
         }
 
-        var doctor = await _context.Doctors
-            .FirstOrDefaultAsync(m => m.Id == id);
+        var doctor =  _context.Doctors
+            .FirstOrDefault(m => m.Id == id);
         if (doctor == null)
         {
             return NotFound();
@@ -130,16 +168,16 @@ public class DoctorsController : Controller
 
     // POST: DOCTORS/Delete/5
     [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? id)
+   
+    public ActionResult DeleteConfirmed(int? id)
     {
-        var doctor = await _context.Doctors.FindAsync(id);
+        var doctor = _context.Doctors.Find(id);
         if (doctor != null)
         {
             _context.Doctors.Remove(doctor);
         }
 
-        await _context.SaveChangesAsync();
+         _context.SaveChanges();
         return RedirectToAction(nameof(Index));
     }
 

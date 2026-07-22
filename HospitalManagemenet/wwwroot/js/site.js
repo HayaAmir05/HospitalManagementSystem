@@ -1,4 +1,21 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function togglePassword(inputId, btn) {
+    const input = document.getElementById(inputId);
+    if (input.type === "password") {
+        input.type = "text";
+        btn.textContent = "🙈";
+    } else {
+        input.type = "password";
+        btn.textContent = "👁";
+    }
+}
 
-// Write your JavaScript code.
+// ===== Input restriction: digits only (Contact, phone-style fields) =====
+function restrictToDigits(inputElement) {
+    inputElement.value = inputElement.value.replace(/[^0-9]/g, '');
+}
+
+// ===== Input restriction: letters and spaces only (Name fields) =====
+function restrictToLetters(inputElement) {
+    inputElement.value = inputElement.value.replace(/[^a-zA-Z\s'-.]/g, '');
+}
+

@@ -1,0 +1,39 @@
+﻿@model HospitalManagemenet.Models.User
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<h1>User Details</h1>
+
+<div>
+    <h4>User</h4>
+    <hr />
+
+    <dl class="row">
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Name)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Name)</dd>
+    </dl>
+
+    <dl class="row">
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Email)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Email)</dd>
+    </dl>
+
+    <dl class="row">
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Role)</dt>
+        <dd class="col-sm-10">
+            <span class="badge @(Model.Role == "Admin" ? "bg-danger" : "bg-primary")">@Model.Role</span>
+        </dd>
+    </dl>
+
+    <dl class="row">
+        <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Contact)</dt>
+        <dd class="col-sm-10">@Html.DisplayFor(model => model.Contact)</dd>
+    </dl>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
