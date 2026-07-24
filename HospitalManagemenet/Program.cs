@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 //builder.Services.AddDbContext<DataMisalignedException=>
 
 builder.Services.AddDbContext<AppDbContext>(options =>
