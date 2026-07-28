@@ -3,22 +3,28 @@ using ClosedXML.Excel;
 using DocumentFormat.OpenXml.InkML;
 using HospitalManagemenet.Data;
 using HospitalManagemenet.Models;
+using HospitalManagemenet.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Numerics;
-using ClosedXML.Excel;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
+using System.Numerics;
 
 public class AppointmentsController : Controller
 {
     private readonly AppDbContext _context;
+    private readonly ExcelReportService _excelReportService;
+    private readonly PdfReportService _pdfReportService;
+    private readonly EmailService _emailService;
 
-    public AppointmentsController(AppDbContext context)
+    public AppointmentsController(AppDbContext context, ExcelReportService excelReportService, PdfReportService pdfReportService, EmailService emailService)
     {
         _context = context;
+        _excelReportService = excelReportService;
+        _pdfReportService = pdfReportService;
+        _emailService = emailService;
     }
 
     // GET: APPOINTMENTS/ExportExcel
@@ -31,48 +37,13 @@ public class AppointmentsController : Controller
             .Include(a => a.Doctor)
             .ToList();
 
-        using var workbook = new XLWorkbook();
-        var worksheet = workbook.Worksheets.Add("Appointments");
-
-        // Header row
-        worksheet.Cell(1, 1).Value = "Id";
-        worksheet.Cell(1, 2).Value = "Patient Name";
-        worksheet.Cell(1, 3).Value = "Doctor Name";
-        worksheet.Cell(1, 4).Value = "Appointment Date";
-        worksheet.Cell(1, 5).Value = "Status";
-        worksheet.Cell(1, 6).Value = "Created By";
-
-        var headerRow = worksheet.Row(1);
-        headerRow.Style.Font.Bold = true;
-        headerRow.Style.Fill.BackgroundColor = XLColor.FromHtml("#2563eb");
-        headerRow.Style.Font.FontColor = XLColor.White;
-
-        // Data rows
-        int row = 2;
-        foreach (var a in appointments)
-        {
-            worksheet.Cell(row, 1).Value = a.Id;
-            worksheet.Cell(row, 2).Value = a.Patient?.Name ?? "";
-            worksheet.Cell(row, 3).Value = a.Doctor?.Name ?? "";
-            worksheet.Cell(row, 4).Value = a.AppointmentDate.ToString("yyyy-MM-dd");
-            worksheet.Cell(row, 5).Value = a.Status;
-            worksheet.Cell(row, 6).Value = a.createdBy;
-            row++;
-        }
-
-        worksheet.Columns().AdjustToContents();
-
-        using var stream = new MemoryStream();
-        workbook.SaveAs(stream);
-        var content = stream.ToArray();
+        var content = _excelReportService.GenerateAppointmentsReport(appointments);
 
         return File(content,
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             "AppointmentsReport.xlsx");
+        
     }
-
-
-
 
     // GET: APPOINTMENTS/ExportPdf
     //for pdf
@@ -83,66 +54,9 @@ public class AppointmentsController : Controller
             .Include(a => a.Doctor)
             .ToList();
 
-        var document = Document.Create(container =>
-        {
-            container.Page(page =>
-            {
-                page.Size(PageSizes.A4);
-                page.Margin(30);
-
-                page.Header().Text("Appointments Report")
-                    .FontSize(20).Bold().AlignCenter();
-
-                page.Content().Table(table =>
-                {
-                    table.ColumnsDefinition(columns =>
-                    {
-                        columns.ConstantColumn(30);   // Id
-                        columns.RelativeColumn();     // Patient
-                        columns.RelativeColumn();     // Doctor
-                        columns.RelativeColumn();     // Date
-                        columns.RelativeColumn();     // Status
-                        columns.RelativeColumn();     // CreatedBy
-                    });
-
-                    table.Header(header =>
-                    {
-                        header.Cell().Text("Id").Bold();
-                        header.Cell().Text("Patient").Bold();
-                        header.Cell().Text("Doctor").Bold();
-                        header.Cell().Text("Date").Bold();
-                        header.Cell().Text("Status").Bold();
-                        header.Cell().Text("Created By").Bold();
-                    });
-
-                    foreach (var a in appointments)
-                    {
-                        table.Cell().Text(a.Id.ToString());
-                        table.Cell().Text(a.Patient?.Name ?? "");
-                        table.Cell().Text(a.Doctor?.Name ?? "");
-                        table.Cell().Text(a.AppointmentDate.ToString("yyyy-MM-dd"));
-                        table.Cell().Text(a.Status);
-                        table.Cell().Text(a.createdBy);
-                    }
-                });
-
-                page.Footer().AlignCenter().Text(x =>
-                {
-                    x.Span("Generated on ");
-                    x.Span(DateTime.Now.ToString("yyyy-MM-dd HH:mm"));
-                });
-            });
-        });
-
-        var pdfBytes = document.GeneratePdf();
-
+        var pdfBytes = _pdfReportService.GenerateAppointmentsReport(appointments);
         return File(pdfBytes, "application/pdf", "AppointmentsReport.pdf");
     }
-
-
-
-
-
 
     // GET: APPOINTMENTS
     public ActionResult Index()    
@@ -184,40 +98,42 @@ public class AppointmentsController : Controller
         return View();
     }
 
-    // POST: APPOINTMENTS/Create
-
     [HttpPost]
-  
-    public ActionResult Create( Appointment appointment)
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> Create([Bind("PatientId,DoctorId,AppointmentDate")] Appointment appointment)
     {
-
         try
         {
             appointment.createdBy = HttpContext.Session.GetString("UserName") ?? "System";
             appointment.CreatedAt = DateTime.Now;
+            appointment.Status = "Pending";
+
             ModelState.Remove("createdBy");
             ModelState.Remove("CreatedAt");
-            ModelState.Remove("Patient");   // navigation properties — remove stale validation on these too
+            ModelState.Remove("Patient");
             ModelState.Remove("Doctor");
-
-            appointment.Status = "Pending";
             ModelState.Remove("Status");
-
 
             if (ModelState.IsValid)
             {
                 _context.Add(appointment);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
 
+                // Fetch patient/doctor for email content, since appointment alone only has FK ids
+                var patient = _context.Patients.Find(appointment.PatientId);
+                var doctor = _context.Doctors.Find(appointment.DoctorId);
+
+                if (patient != null && !string.IsNullOrWhiteSpace(patient.Email) && doctor != null)
+                {
+                    await _emailService.SendAppointmentConfirmationAsync(
+                        patient.Email, patient.Name, doctor.Name, appointment.AppointmentDate);
+                }
+
+                return RedirectToAction(nameof(Index));
             }
             else
             {
-                var errors = ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage)
-                    .ToList();
-
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 ModelState.AddModelError(string.Empty, "Validation failed: " + string.Join(" | ", errors));
             }
         }
@@ -226,9 +142,12 @@ public class AppointmentsController : Controller
             ModelState.AddModelError(string.Empty, "An error occurred while creating the appointment: " + ex.Message);
         }
 
-        
+        ViewBag.PatientId = new SelectList(_context.Patients, "Id", "Name");
+        ViewBag.DoctorId = new SelectList(_context.Doctors, "Id", "Name");
         return View(appointment);
     }
+
+    
 
     // GET: APPOINTMENTS/Edit/5
     public ActionResult Edit(int? id)

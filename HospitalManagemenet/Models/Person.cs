@@ -13,6 +13,9 @@ namespace HospitalManagemenet.Models
             ErrorMessage = "Name must contain only letters and be between 2 and 50 characters.")]
         public string Name { get; set; } = null!;
 
+        [EmailAddress(ErrorMessage = "Enter a valid email address.")]
+        public string? Email { get; set; }
+ 
 
         [Required(ErrorMessage = "Age is required")]
         [Range(0, 130, ErrorMessage = "Age must be between 0 and 130.")]

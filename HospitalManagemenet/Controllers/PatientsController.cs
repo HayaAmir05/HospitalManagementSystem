@@ -1,8 +1,10 @@
 
 using HospitalManagemenet.Data;
 using HospitalManagemenet.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 
 public class PatientsController : Controller
@@ -66,6 +68,11 @@ public class PatientsController : Controller
                 ModelState.AddModelError("Age", "Patient's age must be between 0 and 130.");
             }
 
+            if (string.IsNullOrWhiteSpace(patient.Email))
+            {
+                ModelState.AddModelError("Email", "Email is required for patients.");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(patient);
@@ -127,6 +134,12 @@ public class PatientsController : Controller
         {
             ModelState.AddModelError("Age", "Patient's age must be between 0 and 130.");
         }
+
+        if (string.IsNullOrWhiteSpace(patient.Email))
+        {
+            ModelState.AddModelError("Email", "Email is required for patients.");
+        }
+
         if (ModelState.IsValid)
         {
             try
