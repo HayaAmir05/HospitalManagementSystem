@@ -72,6 +72,20 @@ namespace HospitalManagemenet.Services
             await client.AuthenticateAsync(senderEmail, appPassword);
             await client.SendAsync(message);
             await client.DisconnectAsync(true);
-        }
+        }                              
     }
 }
+
+
+
+
+
+                             
+                                         
+
+
+
+
+
+
+

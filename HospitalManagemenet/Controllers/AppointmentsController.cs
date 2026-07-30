@@ -100,7 +100,7 @@ public class AppointmentsController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Create([Bind("PatientId,DoctorId,AppointmentDate")] Appointment appointment)
+    public async Task<ActionResult> Create( Appointment appointment)
     {
         try
         {
