@@ -33,6 +33,7 @@ namespace HospitalManagemenet.Controllers
         // GET: Users/Edit/5
         public ActionResult Edit(int? id)
         {
+        
             if (id == null) return NotFound();
             var user = _context.Users.Find(id);
             if (user == null) return NotFound();

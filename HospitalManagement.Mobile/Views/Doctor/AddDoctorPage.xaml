@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage x:Class="HospitalManagement.Mobile.Views.Doctor.AddDoctorPage" xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" Title="Add Doctor" BackgroundColor="#F5F7FB">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="20">
+
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="14">
+
+                <Button Grid.Column="0" Text="‹" FontSize="32" FontAttributes="Bold" TextColor="#1F3A93" BackgroundColor="#E9F0FF" WidthRequest="48" HeightRequest="48" CornerRadius="14" Clicked="BackButton_Clicked"/>
+
+                <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                    <Label Text="Add Doctor" FontSize="28" FontAttributes="Bold" TextColor="#1F2937"/>
+                    <Label Text="Create a new doctor profile" FontSize="14" TextColor="#6B7280"/>
+                </VerticalStackLayout>
+
+            </Grid>
+
+            <Border BackgroundColor="White" StrokeThickness="0" Padding="22" StrokeShape="RoundRectangle 20">
+
+                <Border.Shadow>
+                    <Shadow Brush="#30000000" Offset="0,3" Radius="12" Opacity="0.15"/>
+                </Border.Shadow>
+
+                <VerticalStackLayout Spacing="18">
+
+                    <Label Text="Personal Information" FontSize="19" FontAttributes="Bold" TextColor="#1F2937"/>
+
+
+                    <!-- NAME -->
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label Text="Full Name *" FontSize="14" FontAttributes="Bold" TextColor="#374151"/>
+
+                        <Border BackgroundColor="#F9FAFB" Stroke="#D1D5DB" StrokeThickness="1" Padding="12,0" StrokeShape="RoundRectangle 12">
+                            <Entry x:Name="NameEntry" Placeholder="Enter doctor's full name" PlaceholderColor="#9CA3AF" TextColor="#111827" FontSize="15" BackgroundColor="Transparent" ClearButtonVisibility="WhileEditing" TextChanged="NameEntry_TextChanged" Unfocused="NameEntry_Unfocused"/>
+                        </Border>
+
+                        <Label x:Name="NameErrorLabel" TextColor="#DC2626" FontSize="13" FontAttributes="Bold" IsVisible="False"/>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- EMAIL -->
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label Text="Email" FontSize="14" FontAttributes="Bold" TextColor="#374151"/>
+
+                        <Border BackgroundColor="#F9FAFB" Stroke="#D1D5DB" StrokeThickness="1" Padding="12,0" StrokeShape="RoundRectangle 12">
+                            <Entry x:Name="EmailEntry" Placeholder="Enter email address" PlaceholderColor="#9CA3AF" TextColor="#111827" FontSize="15" Keyboard="Email" BackgroundColor="Transparent" ClearButtonVisibility="WhileEditing" Unfocused="EmailEntry_Unfocused"/>
+                        </Border>
+
+                        <Label x:Name="EmailErrorLabel" TextColor="#DC2626" FontSize="13" FontAttributes="Bold" IsVisible="False"/>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- AGE + CONTACT -->
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+
+                        <VerticalStackLayout Grid.Column="0" Spacing="6">
+
+                            <Label Text="Age *" FontSize="14" FontAttributes="Bold" TextColor="#374151"/>
+
+                            <Border BackgroundColor="#F9FAFB" Stroke="#D1D5DB" StrokeThickness="1" Padding="12,0" StrokeShape="RoundRectangle 12">
+                                <Entry x:Name="AgeEntry" Placeholder="23 - 80" PlaceholderColor="#9CA3AF" TextColor="#111827" FontSize="15" Keyboard="Numeric" BackgroundColor="Transparent" TextChanged="AgeEntry_TextChanged" Unfocused="AgeEntry_Unfocused"/>
+                            </Border>
+
+                            <Label x:Name="AgeErrorLabel" TextColor="#DC2626" FontSize="13" FontAttributes="Bold" IsVisible="False"/>
+
+                        </VerticalStackLayout>
+
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="6">
+
+                            <Label Text="Contact *" FontSize="14" FontAttributes="Bold" TextColor="#374151"/>
+
+                            <Border BackgroundColor="#F9FAFB" Stroke="#D1D5DB" StrokeThickness="1" Padding="12,0" StrokeShape="RoundRectangle 12">
+                                <Entry x:Name="ContactEntry" Placeholder="03001234567 or +923001234567" PlaceholderColor="#9CA3AF" TextColor="#111827" FontSize="15" Keyboard="Telephone" BackgroundColor="Transparent" TextChanged="ContactEntry_TextChanged" Unfocused="ContactEntry_Unfocused"/>
+                            </Border>
+
+                            <Label x:Name="ContactErrorLabel" TextColor="#DC2626" FontSize="13" FontAttributes="Bold" IsVisible="False"/>
+
+                        </VerticalStackLayout>
+
+                    </Grid>
+
+
+                    <Label Text="Professional Information" FontSize="19" FontAttributes="Bold" TextColor="#1F2937" Margin="0,8,0,0"/>
+
+
+                    <!-- SPECIALIZATION -->
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label Text="Specialization *" FontSize="14" FontAttributes="Bold" TextColor="#374151"/>
+
+                        <Border BackgroundColor="#F9FAFB" Stroke="#D1D5DB" StrokeThickness="1" Padding="12,0" StrokeShape="RoundRectangle 12">
+                            <Entry x:Name="SpecializationEntry" Placeholder="e.g. Cardiologist" PlaceholderColor="#9CA3AF" TextColor="#111827" FontSize="15" BackgroundColor="Transparent" ClearButtonVisibility="WhileEditing" TextChanged="SpecializationEntry_TextChanged" Unfocused="SpecializationEntry_Unfocused"/>
+                        </Border>
+
+                        <Label x:Name="SpecializationErrorLabel" TextColor="#DC2626" FontSize="13" FontAttributes="Bold" IsVisible="False"/>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- EXPERIENCE -->
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label Text="Experience (Years) *" FontSize="14" FontAttributes="Bold" TextColor="#374151"/>
+
+                        <Border BackgroundColor="#F9FAFB" Stroke="#D1D5DB" StrokeThickness="1" Padding="12,0" StrokeShape="RoundRectangle 12">
+                            <Entry x:Name="ExperienceEntry" Placeholder="e.g. 5" PlaceholderColor="#9CA3AF" TextColor="#111827" FontSize="15" Keyboard="Numeric" BackgroundColor="Transparent" TextChanged="ExperienceEntry_TextChanged" Unfocused="ExperienceEntry_Unfocused"/>
+                        </Border>
+
+                        <Label x:Name="ExperienceErrorLabel" TextColor="#DC2626" FontSize="13" FontAttributes="Bold" IsVisible="False"/>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- GENERAL ERROR -->
+
+                    <Label x:Name="GeneralErrorLabel" TextColor="#DC2626" FontSize="13" FontAttributes="Bold" HorizontalOptions="Center" HorizontalTextAlignment="Center" IsVisible="False"/>
+
+
+                    <!-- LOADING -->
+
+                    <ActivityIndicator x:Name="LoadingIndicator" IsVisible="False" IsRunning="False" Color="#1F3A93" HorizontalOptions="Center" Margin="0,5"/>
+
+
+                    <!-- BUTTONS -->
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,8,0,0">
+
+                        <Button Grid.Column="0" Text="Cancel" FontSize="15" FontAttributes="Bold" TextColor="#374151" BackgroundColor="#E5E7EB" HeightRequest="50" CornerRadius="14" Clicked="CancelButton_Clicked"/>
+
+                        <Button x:Name="SaveButton" Grid.Column="1" Text="Save Doctor" FontSize="15" FontAttributes="Bold" TextColor="White" BackgroundColor="#1F3A93" HeightRequest="50" CornerRadius="14" Clicked="SaveDoctor_Clicked"/>
+
+                    </Grid>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

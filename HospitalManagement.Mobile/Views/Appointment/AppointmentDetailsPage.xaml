@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage x:Class="HospitalManagement.Mobile.Views.Appointment.AppointmentDetailsPage" xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" BackgroundColor="#F5F7FB" Title="Appointment Details">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Button Text="‹" Clicked="Back_Clicked" BackgroundColor="Transparent" TextColor="#1F3A93" FontSize="32" WidthRequest="45" HeightRequest="45"/>
+                <VerticalStackLayout Grid.Column="1" Spacing="1">
+                    <Label Text="Appointment Details" FontSize="28" FontAttributes="Bold" TextColor="#1F2937"/>
+                    <Label Text="View appointment information" FontSize="14" TextColor="#6B7280"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <ActivityIndicator x:Name="LoadingIndicator" IsVisible="False" IsRunning="False" Color="#1F3A93" HorizontalOptions="Center"/>
+
+            <Border BackgroundColor="White" Padding="20" StrokeThickness="0" StrokeShape="RoundRectangle 22">
+                <VerticalStackLayout Spacing="16">
+
+                    <Label Text="Appointment Information" FontSize="20" FontAttributes="Bold" TextColor="#111111"/>
+
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto" RowSpacing="14">
+
+                        <Label Text="Appointment ID" FontAttributes="Bold" TextColor="#6B7280" Grid.Row="0" Grid.Column="0"/>
+                        <Label x:Name="IdLabel" Text="-" TextColor="#111827" Grid.Row="0" Grid.Column="1"/>
+
+                        <Label Text="Patient" FontAttributes="Bold" TextColor="#6B7280" Grid.Row="1" Grid.Column="0"/>
+                        <Label x:Name="PatientLabel" Text="-" TextColor="#111827" Grid.Row="1" Grid.Column="1"/>
+
+                        <Label Text="Doctor" FontAttributes="Bold" TextColor="#6B7280" Grid.Row="2" Grid.Column="0"/>
+                        <Label x:Name="DoctorLabel" Text="-" TextColor="#111827" Grid.Row="2" Grid.Column="1"/>
+
+                        <Label Text="Appointment Date" FontAttributes="Bold" TextColor="#6B7280" Grid.Row="3" Grid.Column="0"/>
+                        <Label x:Name="DateLabel" Text="-" TextColor="#111827" Grid.Row="3" Grid.Column="1"/>
+
+                        <Label Text="Status" FontAttributes="Bold" TextColor="#6B7280" Grid.Row="4" Grid.Column="0"/>
+                        <Label x:Name="StatusLabel" Text="-" FontAttributes="Bold" TextColor="#111827" Grid.Row="4" Grid.Column="1"/>
+
+                        <Label Text="Created By" FontAttributes="Bold" TextColor="#6B7280" Grid.Row="5" Grid.Column="0"/>
+                        <Label x:Name="CreatedByLabel" Text="-" TextColor="#111827" Grid.Row="5" Grid.Column="1"/>
+
+                        <Label Text="Created At" FontAttributes="Bold" TextColor="#6B7280" Grid.Row="6" Grid.Column="0"/>
+                        <Label x:Name="CreatedAtLabel" Text="-" TextColor="#111827" Grid.Row="6" Grid.Column="1"/>
+
+                    </Grid>
+
+                    <Border x:Name="OverdueBorder" BackgroundColor="#FEF2F2" Stroke="#FCA5A5" StrokeThickness="1" StrokeShape="RoundRectangle 12" Padding="12" IsVisible="False">
+                        <Label x:Name="OverdueLabel" TextColor="#B91C1C" FontAttributes="Bold" FontSize="13"/>
+                    </Border>
+
+                    <Button Text="Edit Appointment" Clicked="Edit_Clicked" BackgroundColor="#1F3A93" TextColor="White" FontAttributes="Bold" FontSize="16" HeightRequest="52" CornerRadius="15"/>
+
+                    <Button Text="Delete Appointment" Clicked="Delete_Clicked" BackgroundColor="#DC2626" TextColor="White" FontAttributes="Bold" FontSize="16" HeightRequest="52" CornerRadius="15"/>
+
+                    <Button Text="Back to Appointments" Clicked="Back_Clicked" BackgroundColor="#E5E7EB" TextColor="#1F2937" FontAttributes="Bold" HeightRequest="48" CornerRadius="15"/>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

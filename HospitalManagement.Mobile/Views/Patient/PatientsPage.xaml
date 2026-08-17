@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="HospitalManagement.Mobile.Views.Patient.PatientsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="#F5F7FB"
+    Title="Patients">
+
+    <Grid>
+
+        <RefreshView
+            x:Name="RefreshPatients"
+            Refreshing="RefreshPatients_Refreshing">
+
+            <ScrollView>
+
+                <VerticalStackLayout
+                    Padding="20"
+                    Spacing="18">
+
+                    <!-- Header -->
+
+                    <Grid
+                        ColumnDefinitions="*,Auto"
+                        ColumnSpacing="12">
+
+                        <VerticalStackLayout
+                            Spacing="2">
+
+                            <Label
+                                Text="Patients"
+                                FontSize="34"
+                                FontAttributes="Bold"
+                                TextColor="#1F2937"/>
+
+                            <Label
+                                Text="Manage hospital patients"
+                                FontSize="15"
+                                TextColor="#6B7280"/>
+
+                        </VerticalStackLayout>
+
+                        <Button
+                            Grid.Column="1"
+                            Text="+ Add Patient"
+                            Clicked="AddPatient_Clicked"
+                            BackgroundColor="#1F3A93"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            FontSize="14"
+                            WidthRequest="130"
+                            HeightRequest="46"
+                            CornerRadius="15"/>
+
+                    </Grid>
+
+
+                    <!-- Search -->
+
+                    <SearchBar
+                        x:Name="SearchBarPatients"
+                        Placeholder="Search patient by name or disease..."
+                        PlaceholderColor="#888888"
+                        TextColor="#111111"
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        BackgroundColor="White"
+                        Margin="0,5,0,0"
+                        TextChanged="SearchBarPatients_TextChanged"/>
+
+
+                    <!-- Loading -->
+
+                    <ActivityIndicator
+                        x:Name="LoadingIndicator"
+                        IsVisible="False"
+                        IsRunning="False"
+                        Color="#1F3A93"
+                        HorizontalOptions="Center"/>
+
+
+                    <!-- Empty State -->
+
+                    <VerticalStackLayout
+                        x:Name="EmptyLayout"
+                        IsVisible="False"
+                        Spacing="10"
+                        Padding="30"
+                        HorizontalOptions="Center">
+
+                        <Label
+                            Text="🧑‍⚕️"
+                            FontSize="65"
+                            HorizontalOptions="Center"/>
+
+                        <Label
+                            Text="No Patients Found"
+                            FontSize="22"
+                            FontAttributes="Bold"
+                            TextColor="#1F2937"
+                            HorizontalOptions="Center"/>
+
+                        <Label
+                            Text="Tap Add Patient to create your first patient."
+                            FontSize="14"
+                            TextColor="#6B7280"
+                            HorizontalTextAlignment="Center"/>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- Patient List -->
+
+                    <CollectionView
+                        x:Name="PatientsCollectionView"
+                        SelectionMode="None">
+
+                        <CollectionView.ItemTemplate>
+
+                            <DataTemplate>
+
+                                <Border
+                                    Margin="0,7"
+                                    Padding="18"
+                                    BackgroundColor="White"
+                                    StrokeThickness="0"
+                                    StrokeShape="RoundRectangle 20">
+
+                                    <Border.Shadow>
+
+                                        <Shadow
+                                            Brush="#40000000"
+                                            Offset="2,2"
+                                            Radius="10"
+                                            Opacity="0.18"/>
+
+                                    </Border.Shadow>
+
+                                    <Border.GestureRecognizers>
+
+                                        <TapGestureRecognizer
+                                            Tapped="PatientCard_Tapped"/>
+
+                                    </Border.GestureRecognizers>
+
+
+                                    <Grid
+                                        ColumnDefinitions="65,*,35"
+                                        RowDefinitions="Auto,Auto,Auto">
+
+                                        <!-- Avatar -->
+
+                                        <Frame
+                                            Grid.RowSpan="3"
+                                            WidthRequest="52"
+                                            HeightRequest="52"
+                                            CornerRadius="26"
+                                            BackgroundColor="#E9F2FF"
+                                            Padding="0"
+                                            HasShadow="False"
+                                            VerticalOptions="Center">
+
+                                            <Label
+                                                Text="🧑"
+                                                FontSize="28"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="Center"
+                                                TextColor="#111111"/>
+
+                                        </Frame>
+
+
+                                        <!-- Name -->
+
+                                        <Label
+                                            Grid.Column="1"
+                                            Text="{Binding Name}"
+                                            FontSize="21"
+                                            FontAttributes="Bold"
+                                            TextColor="#111111"/>
+
+
+                                        <!-- Disease -->
+
+                                        <Label
+                                            Grid.Column="1"
+                                            Grid.Row="1"
+                                            Text="{Binding Disease}"
+                                            FontSize="16"
+                                            FontAttributes="Bold"
+                                            TextColor="#1F4ACC"/>
+
+
+                                        <!-- Age / Contact -->
+
+                                        <HorizontalStackLayout
+                                            Grid.Column="1"
+                                            Grid.Row="2"
+                                            Spacing="18">
+
+                                            <Label
+                                                FontSize="13"
+                                                FontAttributes="Bold"
+                                                TextColor="#444444">
+
+                                                <Label.FormattedText>
+
+                                                    <FormattedString>
+
+                                                        <Span
+                                                            Text="Age: "
+                                                            TextColor="#444444"/>
+
+                                                        <Span
+                                                            Text="{Binding Age}"
+                                                            FontAttributes="Bold"
+                                                            TextColor="#111111"/>
+
+                                                    </FormattedString>
+
+                                                </Label.FormattedText>
+
+                                            </Label>
+
+                                            <Label
+                                                FontSize="13"
+                                                FontAttributes="Bold"
+                                                TextColor="#444444">
+
+                                                <Label.FormattedText>
+
+                                                    <FormattedString>
+
+                                                        <Span
+                                                            Text="Contact: "
+                                                            TextColor="#444444"/>
+
+                                                        <Span
+                                                            Text="{Binding Contact}"
+                                                            FontAttributes="Bold"
+                                                            TextColor="#111111"/>
+
+                                                    </FormattedString>
+
+                                                </Label.FormattedText>
+
+                                            </Label>
+
+                                        </HorizontalStackLayout>
+
+
+                                        <!-- Arrow -->
+
+                                        <Label
+                                            Grid.Column="2"
+                                            Grid.RowSpan="3"
+                                            Text="❯"
+                                            FontSize="24"
+                                            TextColor="#1F4ACC"
+                                            VerticalOptions="Center"
+                                            HorizontalOptions="End"/>
+
+                                    </Grid>
+
+                                </Border>
+
+                            </DataTemplate>
+
+                        </CollectionView.ItemTemplate>
+
+                    </CollectionView>
+
+                </VerticalStackLayout>
+
+            </ScrollView>
+
+        </RefreshView>
+
+    </Grid>
+
+</ContentPage>

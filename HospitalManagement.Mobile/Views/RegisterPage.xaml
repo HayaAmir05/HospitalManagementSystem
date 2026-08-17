@@ -1,0 +1,91 @@
+<ContentPage
+    x:Class="HospitalManagement.Mobile.RegisterPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="#F4F7FC"
+    Title="Register">
+
+    <ScrollView>
+        <Grid Padding="30">
+            <VerticalStackLayout
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Spacing="14"
+                MaximumWidthRequest="380">
+
+                <Label Text="🏥" FontSize="40" HorizontalOptions="Center"/>
+                <Label Text="Create Account" FontSize="26" FontAttributes="Bold"
+                       TextColor="#1F3A93" HorizontalOptions="Center"/>
+
+                <Label Text="Full Name" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                <Border Stroke="#D9D9D9" StrokeThickness="1" StrokeShape="RoundRectangle 10">
+                    <Entry x:Name="NameEntry" Placeholder="Enter your name" TextColor="Black" Margin="10"  TextChanged="OnNameTextChanged" />
+                </Border>
+                <Label x:Name="NameErrorLabel" TextColor="Red" FontSize="12" IsVisible="False"/>
+
+                <Label Text="Hospital Email" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                <Border Stroke="#D9D9D9" StrokeThickness="1" StrokeShape="RoundRectangle 10">
+                    <Entry x:Name="EmailEntry" Placeholder="Enter the Email" TextColor="Black" Keyboard="Email" Margin="10"/>
+                </Border>
+                <Label x:Name="EmailErrorLabel" TextColor="Red" FontSize="12" IsVisible="False"/>
+
+                <Label Text="Password" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                <Border Stroke="#D9D9D9" StrokeThickness="1" StrokeShape="RoundRectangle 10">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Entry x:Name="PasswordEntry" Grid.Column="0"
+                               Placeholder="Enter the Password" TextColor="Black" IsPassword="True" Margin="10"/>
+                        <Button x:Name="PasswordToggleButton" Grid.Column="1"
+                                Text="👁" BackgroundColor="Transparent" TextColor="Gray"
+                                Clicked="OnTogglePasswordClicked" WidthRequest="45"/>
+                    </Grid>
+                </Border>
+                <Label FontSize="11" TextColor="Gray" Margin="2,0,0,5" Text="Password must be at least 8 characters and include an uppercase letter, a lowercase letter, and a number."/>
+                <Label x:Name="PasswordErrorLabel" TextColor="Red" FontSize="12" IsVisible="False"/>
+
+                <Label Text="Confirm Password" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                <Border Stroke="#D9D9D9" StrokeThickness="1" StrokeShape="RoundRectangle 10">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Entry x:Name="ConfirmPasswordEntry" Grid.Column="0"
+                               Placeholder="Confirm your password" TextColor="Black" IsPassword="True" Margin="10"/>
+                        <Button x:Name="ConfirmPasswordToggleButton" Grid.Column="1"
+                                Text="👁" BackgroundColor="Transparent" TextColor="Gray"
+                                Clicked="OnToggleConfirmPasswordClicked" WidthRequest="45"/>
+                    </Grid>
+                </Border>
+                <Label x:Name="ConfirmPasswordErrorLabel" TextColor="Red" FontSize="12" IsVisible="False"/>
+
+                
+                <Label Text="Contact" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                <Border Stroke="#D9D9D9" StrokeThickness="1" StrokeShape="RoundRectangle 10">
+                    <Entry x:Name="ContactEntry" Placeholder="03XXXXXXXXX" TextColor="Black" Keyboard="Telephone" Margin="10" TextChanged="OnContactTextChanged"/>
+                </Border>
+                <Label x:Name="ContactErrorLabel" TextColor="Red" FontSize="12" IsVisible="False"/>
+
+                
+                <Label Text="Role" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                    <Border Stroke="#D9D9D9" StrokeThickness="1" StrokeShape="RoundRectangle 10">
+                        <Button x:Name="RoleButton" Text="Select Role" BackgroundColor="Transparent" TextColor="Gray" HorizontalOptions="Start" Clicked="OnRoleButtonClicked"/>
+                    </Border>
+                <Label x:Name="RoleErrorLabel" TextColor="Red" FontSize="12" IsVisible="False"/>
+
+                <Label x:Name="GeneralErrorLabel" TextColor="Red" FontSize="13"
+                       HorizontalOptions="Center" IsVisible="False"/>
+
+                    
+                <Button Text="Register" HeightRequest="50" CornerRadius="10"
+                        BackgroundColor="#1F3A93" TextColor="White"
+                        Clicked="OnRegisterClicked"/>
+
+                <Label Text="Already have an account? Login"
+                       TextColor="#1F3A93" HorizontalOptions="Center" FontAttributes="Bold">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnLoginTapped"/>
+                    </Label.GestureRecognizers>
+                </Label>
+
+            </VerticalStackLayout>
+        </Grid>
+    </ScrollView>
+</ContentPage>
+    
+    

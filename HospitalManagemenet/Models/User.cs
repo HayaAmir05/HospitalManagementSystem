@@ -31,7 +31,7 @@ namespace HospitalManagemenet.Models
         public string Role { get; set; } = null!;
 
         [Required(ErrorMessage = "Contact is required")]
-        [RegularExpression(@"^(03\d{9}|\+923\d{9})$", ErrorMessage = "Enter a valid Pakistani number (e.g., 03001234567 or +923001234567).")]
+        [RegularExpression(@"^(03\d{9}|\+923\d{9})$", ErrorMessage = "Enter a valid Pakistani number (e.g., 03001234567 or 923001234567).")]
         public string Contact { get; set; } = null!;
 
         [NotMapped]

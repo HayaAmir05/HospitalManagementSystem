@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="HospitalManagement.Mobile.Views.Appointment.AppointmentsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="#F4F6FA"
+    Title="Appointments"
+    Shell.NavBarIsVisible="True">
+
+    <Grid>
+
+        <RefreshView
+            x:Name="RefreshAppointments"
+            Refreshing="RefreshAppointments_Refreshing">
+
+            <ScrollView>
+
+                <VerticalStackLayout
+                    Padding="20"
+                    Spacing="20">
+
+                    <!-- HEADER -->
+
+                    <Grid ColumnDefinitions="*,Auto">
+
+                        <VerticalStackLayout Spacing="2">
+
+                            <Label
+                                Text="Appointments"
+                                FontSize="34"
+                                FontAttributes="Bold"
+                                TextColor="#1F2937"/>
+
+                            <Label
+                                Text="Manage hospital appointments"
+                                FontSize="15"
+                                TextColor="#6B7280"/>
+
+                        </VerticalStackLayout>
+
+                        <Button
+                            Grid.Column="1"
+                            Text="+ Add Appointment"
+                            Clicked="Add_Clicked"
+                            BackgroundColor="#1F3A93"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            FontSize="15"
+                            WidthRequest="155"
+                            HeightRequest="46"
+                            CornerRadius="15"/>
+
+                    </Grid>
+
+
+                    <!-- SEARCH -->
+
+                    <SearchBar
+                        x:Name="SearchBarAppointments"
+                        Placeholder="Search by patient, doctor or status..."
+                        PlaceholderColor="#888888"
+                        TextColor="Black"
+                        FontSize="15"
+                        FontAttributes="Bold"
+                        BackgroundColor="White"
+                        TextChanged="SearchBarAppointments_TextChanged"/>
+
+
+                    <!-- LOADING -->
+
+                    <ActivityIndicator
+                        x:Name="LoadingIndicator"
+                        IsVisible="False"
+                        IsRunning="False"
+                        HorizontalOptions="Center"
+                        Color="#1F3A93"/>
+
+
+                    <!-- EMPTY -->
+
+                    <VerticalStackLayout
+                        x:Name="EmptyLayout"
+                        IsVisible="False"
+                        HorizontalOptions="Center"
+                        Padding="40"
+                        Spacing="10">
+
+                        <Label
+                            Text="📅"
+                            FontSize="70"
+                            HorizontalOptions="Center"/>
+
+                        <Label
+                            Text="No Appointments Found"
+                            FontSize="22"
+                            FontAttributes="Bold"
+                            TextColor="Black"
+                            HorizontalOptions="Center"/>
+
+                        <Label
+                            Text="Tap Add Appointment to create your first appointment."
+                            HorizontalTextAlignment="Center"
+                            TextColor="#666666"/>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- APPOINTMENTS -->
+
+                    <CollectionView
+                        x:Name="AppointmentsCollectionView"
+                        SelectionMode="None">
+
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border
+            BackgroundColor="White"
+            StrokeThickness="0"
+            StrokeShape="RoundRectangle 18"
+            Padding="16"
+            Margin="0,0,0,12">
+
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="AppointmentCard_Tapped"/>
+                                    </Border.GestureRecognizers>
+
+                                    <Grid RowDefinitions="Auto,Auto,Auto"
+                  ColumnDefinitions="*,Auto">
+
+                                        <VerticalStackLayout>
+                                            <Label
+                        Text="{Binding PatientName}"
+                        FontSize="18"
+                        FontAttributes="Bold"
+                        TextColor="#111827"/>
+
+                                            <Label
+                        Text="{Binding DoctorName, StringFormat='Dr. {0}'}"
+                        FontSize="14"
+                        TextColor="#6B7280"/>
+                                        </VerticalStackLayout>
+
+                                        <Border
+                    Grid.Column="1"
+                    BackgroundColor="#FEF3C7"
+                    StrokeThickness="0"
+                    StrokeShape="RoundRectangle 10"
+                    Padding="10,5">
+
+                                            <Label
+                        Text="{Binding Status}"
+                        FontSize="12"
+                        FontAttributes="Bold"
+                        TextColor="#92400E"/>
+                                        </Border>
+
+                                        <Label
+                    Grid.Row="1"
+                    Text="{Binding AppointmentDate, StringFormat='📅 {0:dd MMM yyyy}'}"
+                    FontSize="14"
+                    TextColor="#374151"
+                    Margin="0,12,0,0"/>
+
+                                        <Label
+                    Grid.Row="2"
+                    Text="{Binding AppointmentDate, StringFormat='🕒 {0:hh:mm tt}'}"
+                    FontSize="14"
+                    TextColor="#374151"/>
+
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+
+                    </CollectionView>
+
+                </VerticalStackLayout>
+
+            </ScrollView>
+
+        </RefreshView>
+
+    </Grid>
+
+</ContentPage>

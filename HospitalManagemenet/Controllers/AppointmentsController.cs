@@ -205,8 +205,14 @@ public class AppointmentsController : Controller
         {
             ModelState.AddModelError("Status", "Past appointments cannot remain Pending — mark as Completed or Cancelled.");
         }
+        if (appointment.AppointmentDate.Date >= DateTime.Today && appointment.Status == "Completed")
+        {
+            ModelState.AddModelError(
+                "Status",
+                "An appointment can only be marked Completed after its scheduled date.");
+        }
 
-        
+
 
         if (ModelState.IsValid)
         {

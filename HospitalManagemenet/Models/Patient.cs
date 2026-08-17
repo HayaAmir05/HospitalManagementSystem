@@ -7,6 +7,7 @@ namespace HospitalManagemenet.Models
         [Required(ErrorMessage = "Disease is required")]
         public string Disease { get; set; } = null!;
 
+
         [Required(ErrorMessage = "Address is required")]
         public string Address { get; set; } = null!;
 

@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="HospitalManagemenet/HospitalManagemenet.csproj" />
+  <Project Path="HospitalManagement.Mobile/HospitalManagement.Mobile.csproj" Id="2413703a-a6c4-43c0-8707-88dde747c6c3" />
 </Solution>

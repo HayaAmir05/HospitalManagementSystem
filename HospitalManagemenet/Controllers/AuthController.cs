@@ -1,16 +1,16 @@
-﻿using HospitalManagemenet.Data;
-using HospitalManagemenet.Models;
+﻿using HospitalManagemenet.Models;
+using HospitalManagemenet.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HospitalManagemenet.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly IAuthService _authService;
 
-        public AuthController(AppDbContext context)
+        public AuthController(IAuthService authService)
         {
-            _context = context;
+            _authService = authService;
         }
 
         public IActionResult Login()
@@ -18,11 +18,16 @@ namespace HospitalManagemenet.Controllers
             return View();
         }
 
+        
         [HttpPost]
-        public IActionResult Login(LoginViewModel user)
+        public async Task<IActionResult> Login(LoginViewModel user)
         {
-            // Login logic 
-            var userInDb = _context.Users.FirstOrDefault(u => u.Email == user.Email && u.Password == user.Password);
+            if (!ModelState.IsValid)
+            {
+                return View(user);
+            }
+            var userInDb = await _authService.ValidateUserAsync(user.Email, user.Password);
+
             if (userInDb != null)
             {
                 HttpContext.Session.SetString("UserName", userInDb.Name);
@@ -40,29 +45,34 @@ namespace HospitalManagemenet.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(User user)
+        public async Task<IActionResult> Register(User user)
         {
-            user.createdBy = "Self-Registered";
-            user.CreatedAt = DateTime.Now;
+
             ModelState.Remove("createdBy");
             ModelState.Remove("CreatedAt");
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Users.Add(user);
-                _context.SaveChanges();
-                return RedirectToAction("Login");
+                return View(user);
             }
 
+            bool success = await _authService.RegisterAsync(user);
 
+            if (!success)
+            {
+                ModelState.AddModelError("Email",
+                    "An account with this email already exists.");
 
-            return View(user);
+                return View(user);
+            }
+
+            return RedirectToAction("Login");
         }
 
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
-             
+
             return RedirectToAction("Login");
 
         }

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="HospitalManagement.Mobile.Views.Appointment.EditAppointmentPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="#F5F7FB"
+    Title="Edit Appointment">
+
+    <ScrollView>
+
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="16">
+
+            <!-- HEADER -->
+
+            <Grid
+                ColumnDefinitions="Auto,*"
+                ColumnSpacing="12">
+
+                <Button
+                    Text="‹"
+                    Clicked="Back_Clicked"
+                    BackgroundColor="Transparent"
+                    TextColor="#1F3A93"
+                    FontSize="32"
+                    WidthRequest="45"
+                    HeightRequest="45" />
+
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Spacing="1">
+
+                    <Label
+                        Text="Edit Appointment"
+                        FontSize="28"
+                        FontAttributes="Bold"
+                        TextColor="#1F2937" />
+
+                    <Label
+                        Text="Update appointment information"
+                        FontSize="14"
+                        TextColor="#6B7280" />
+
+                </VerticalStackLayout>
+
+            </Grid>
+
+
+            <!-- PAGE LOADING -->
+
+            <ActivityIndicator
+                x:Name="PageLoadingIndicator"
+                IsVisible="False"
+                IsRunning="False"
+                Color="#1F3A93"
+                HorizontalOptions="Center" />
+
+
+            <!-- MAIN CARD -->
+
+            <Border
+                BackgroundColor="White"
+                Padding="20"
+                StrokeThickness="0"
+                StrokeShape="RoundRectangle 22">
+
+                <VerticalStackLayout Spacing="14">
+
+                    <Label
+                        Text="Appointment Information"
+                        FontSize="20"
+                        FontAttributes="Bold"
+                        TextColor="#111111" />
+
+
+                    <!-- PATIENT -->
+
+                    <Label
+                        Text="Patient"
+                        FontAttributes="Bold"
+                        FontSize="14"
+                        TextColor="#111827" />
+
+                    <Picker
+                        x:Name="PatientPicker"
+                        Title="Select Patient"
+                        TitleColor="#6B7280"
+                        TextColor="#111827"
+                        BackgroundColor="#EEF2F7"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedIndexChanged="PatientPicker_SelectedIndexChanged" />
+
+                    <Label
+                        x:Name="PatientErrorLabel"
+                        TextColor="#DC2626"
+                        FontSize="13"
+                        FontAttributes="Bold"
+                        IsVisible="False" />
+
+
+                    <!-- DOCTOR -->
+
+                    <Label
+                        Text="Doctor"
+                        FontAttributes="Bold"
+                        FontSize="14"
+                        TextColor="#111827" />
+
+                    <Picker
+                        x:Name="DoctorPicker"
+                        Title="Select Doctor"
+                        TitleColor="#6B7280"
+                        TextColor="#111827"
+                        BackgroundColor="#EEF2F7"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedIndexChanged="DoctorPicker_SelectedIndexChanged" />
+
+                    <Label
+                        x:Name="DoctorErrorLabel"
+                        TextColor="#DC2626"
+                        FontSize="13"
+                        FontAttributes="Bold"
+                        IsVisible="False" />
+
+
+                    <!-- APPOINTMENT DATE -->
+
+                    <Label
+                        Text="Appointment Date"
+                        FontAttributes="Bold"
+                        FontSize="14"
+                        TextColor="#111827" />
+
+                    <DatePicker
+                        x:Name="AppointmentDatePicker"
+                        Format="dd MMM yyyy"
+                        BackgroundColor="#EEF2F7"
+                        TextColor="#111827"
+                        DateSelected="AppointmentDatePicker_DateSelected" />
+
+                    <Label
+                        x:Name="AppointmentDateErrorLabel"
+                        TextColor="#DC2626"
+                        FontSize="13"
+                        FontAttributes="Bold"
+                        IsVisible="False" />
+
+
+                    <!-- STATUS -->
+
+                    <Label
+                        Text="Status"
+                        FontAttributes="Bold"
+                        FontSize="14"
+                        TextColor="#111827" />
+
+                    <Picker
+                        x:Name="StatusPicker"
+                        Title="Select Status"
+                        TitleColor="#6B7280"
+                        TextColor="#111827"
+                        BackgroundColor="#EEF2F7"
+                        SelectedIndexChanged="StatusPicker_SelectedIndexChanged" />
+
+                    <Label
+                        x:Name="StatusErrorLabel"
+                        TextColor="#DC2626"
+                        FontSize="13"
+                        FontAttributes="Bold"
+                        IsVisible="False" />
+
+
+                    <!-- GENERAL ERROR -->
+
+                    <Label
+                        x:Name="GeneralErrorLabel"
+                        TextColor="#DC2626"
+                        FontSize="13"
+                        FontAttributes="Bold"
+                        IsVisible="False"
+                        HorizontalOptions="Center" />
+
+
+                    <!-- SAVING -->
+
+                    <ActivityIndicator
+                        x:Name="SavingIndicator"
+                        IsVisible="False"
+                        IsRunning="False"
+                        Color="#1F3A93"
+                        HorizontalOptions="Center" />
+
+
+                    <!-- SAVE -->
+
+                    <Button
+                        x:Name="SaveButton"
+                        Text="Save Changes"
+                        Clicked="Save_Clicked"
+                        BackgroundColor="#1F3A93"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        HeightRequest="52"
+                        CornerRadius="15" />
+
+
+                    <!-- CANCEL -->
+
+                    <Button
+                        Text="Cancel"
+                        Clicked="Back_Clicked"
+                        BackgroundColor="#E5E7EB"
+                        TextColor="#1F2937"
+                        FontAttributes="Bold"
+                        HeightRequest="48"
+                        CornerRadius="15" />
+
+                </VerticalStackLayout>
+
+            </Border>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>

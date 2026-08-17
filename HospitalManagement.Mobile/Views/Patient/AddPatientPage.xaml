@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage x:Class="HospitalManagement.Mobile.Views.Patient.AddPatientPage" xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" BackgroundColor="#F5F7FB" Title="Add Patient">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                <Button Text="‹" Clicked="Back_Clicked" BackgroundColor="Transparent" TextColor="#1F3A93" FontSize="32" WidthRequest="45" HeightRequest="45"/>
+
+                <VerticalStackLayout Grid.Column="1" Spacing="1">
+                    <Label Text="Add Patient" FontSize="28" FontAttributes="Bold" TextColor="#1F2937"/>
+                    <Label Text="Enter patient information" FontSize="14" TextColor="#6B7280"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <Border BackgroundColor="White" Padding="20" StrokeThickness="0" StrokeShape="RoundRectangle 22">
+                <VerticalStackLayout Spacing="14">
+
+                    <Label Text="Patient Information" FontSize="20" FontAttributes="Bold" TextColor="#111111"/>
+
+                    <Label Text="Name" FontAttributes="Bold" FontSize="14" TextColor="#111827"/>
+                    <Border Stroke="#D9E1EC" StrokeThickness="1" StrokeShape="RoundRectangle 10" BackgroundColor="White">
+                        <Entry x:Name="NameEntry" Placeholder="Enter patient name" TextColor="#111827" PlaceholderColor="#9CA3AF" TextChanged="NameEntry_TextChanged" Unfocused="NameEntry_Unfocused"/>
+                    </Border>
+                    <Label x:Name="NameErrorLabel" TextColor="#DC2626" FontSize="13" FontAttributes="Bold" IsVisible="False"/>
+
+                    <Label Text="Email" FontAttributes="Bold" FontSize="14" TextColor="#111827"/>
+                    <Border Stroke="#D9E1EC" StrokeThickness="1" StrokeShape="RoundRectangle 10" BackgroundColor="White">
+                        <Entry x:Name="EmailEntry" Placeholder="Enter patient email" TextColor="#111827" PlaceholderColor="#9CA3AF" Keyboard="Email" Unfocused="EmailEntry_Unfocused"/>
+                    </Border>
+                    <Label x:Name="EmailErrorLabel" TextColor="#DC2626" FontSize="13" FontAttributes="Bold" IsVisible="False"/>
+
+                    <Label Text="Age" FontAttributes="Bold" FontSize="14" TextColor="#111827"/>
+                    <Border Stroke="#D9E1EC" StrokeThickness="1" StrokeShape="RoundRectangle 10" BackgroundColor="White">
+                        <Entry x:Name="AgeEntry" Placeholder="Enter age" TextColor="#111827" PlaceholderColor="#9CA3AF" Keyboard="Numeric" TextChanged="AgeEntry_TextChanged" Unfocused="AgeEntry_Unfocused"/>
+                    </Border>
+                    <Label x:Name="AgeErrorLabel" TextColor="#DC2626" FontSize="13" FontAttributes="Bold" IsVisible="False"/>
+
+                    <Label Text="Contact" FontAttributes="Bold" FontSize="14" TextColor="#111827"/>
+                    <Border Stroke="#D9E1EC" StrokeThickness="1" StrokeShape="RoundRectangle 10" BackgroundColor="White">
+                        <Entry x:Name="ContactEntry" Placeholder="03001234567" TextColor="#111827" PlaceholderColor="#9CA3AF" Keyboard="Telephone" TextChanged="ContactEntry_TextChanged" Unfocused="ContactEntry_Unfocused"/>
+                    </Border>
+                    <Label x:Name="ContactErrorLabel" TextColor="#DC2626" FontSize="13" FontAttributes="Bold" IsVisible="False"/>
+
+                    <Label Text="Disease" FontAttributes="Bold" FontSize="14" TextColor="#111827"/>
+                    <Border Stroke="#D9E1EC" StrokeThickness="1" StrokeShape="RoundRectangle 10" BackgroundColor="White">
+                        <Entry x:Name="DiseaseEntry" Placeholder="Enter disease" TextColor="#111827" PlaceholderColor="#9CA3AF" Unfocused="DiseaseEntry_Unfocused"/>
+                    </Border>
+                    <Label x:Name="DiseaseErrorLabel" TextColor="#DC2626" FontSize="13" FontAttributes="Bold" IsVisible="False"/>
+
+                    <Label Text="Address" FontAttributes="Bold" FontSize="14" TextColor="#111827"/>
+                    <Border Stroke="#D9E1EC" StrokeThickness="1" StrokeShape="RoundRectangle 10" BackgroundColor="White">
+                        <Editor x:Name="AddressEditor" Placeholder="Enter patient address" TextColor="#111827" PlaceholderColor="#9CA3AF" HeightRequest="100" Unfocused="AddressEditor_Unfocused"/>
+                    </Border>
+                    <Label x:Name="AddressErrorLabel" TextColor="#DC2626" FontSize="13" FontAttributes="Bold" IsVisible="False"/>
+
+                    <ActivityIndicator x:Name="LoadingIndicator" IsVisible="False" IsRunning="False" Color="#1F3A93" HorizontalOptions="Center"/>
+
+                    <Button Text="Save Patient" Clicked="Save_Clicked" BackgroundColor="#1F3A93" TextColor="White" FontAttributes="Bold" FontSize="16" HeightRequest="52" CornerRadius="15"/>
+
+                    <Button Text="Cancel" Clicked="Back_Clicked" BackgroundColor="#E5E7EB" TextColor="#1F2937" FontAttributes="Bold" HeightRequest="48" CornerRadius="15"/>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

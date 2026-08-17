@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="HospitalManagement.Mobile.Views.Doctor.EditDoctorPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Edit Doctor"
+    BackgroundColor="#F5F7FB">
+
+    <ScrollView>
+
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="18">
+
+            <!-- Header -->
+
+            <Grid
+                ColumnDefinitions="Auto,*"
+                ColumnSpacing="14">
+
+                <Button
+                    Grid.Column="0"
+                    Text="‹"
+                    FontSize="30"
+                    FontAttributes="Bold"
+                    TextColor="#1F3A93"
+                    BackgroundColor="White"
+                    WidthRequest="48"
+                    HeightRequest="48"
+                    CornerRadius="14"
+                    Padding="0"
+                    Clicked="Back_Clicked"/>
+
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Spacing="2"
+                    VerticalOptions="Center">
+
+                    <Label
+                        Text="Edit Doctor"
+                        FontSize="28"
+                        FontAttributes="Bold"
+                        TextColor="#1F2937"/>
+
+                    <Label
+                        Text="Update doctor information"
+                        FontSize="14"
+                        TextColor="#6B7280"/>
+
+                </VerticalStackLayout>
+
+            </Grid>
+
+
+            <!-- Loading -->
+
+            <ActivityIndicator
+                x:Name="LoadingIndicator"
+                IsVisible="False"
+                IsRunning="False"
+                Color="#1F3A93"
+                HorizontalOptions="Center"/>
+
+
+            <!-- Form Card -->
+
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                Padding="22"
+                StrokeShape="RoundRectangle 22">
+
+                <VerticalStackLayout
+                    Spacing="16">
+
+
+                    <!-- Name -->
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="Full Name"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="#374151"/>
+
+                        <Entry
+                            x:Name="NameEntry"
+                            Placeholder="Enter doctor's name"
+                            PlaceholderColor="#9CA3AF"
+                            TextColor="#111827"
+                            BackgroundColor="#F9FAFB"
+                            FontSize="16"/>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- Email -->
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="Email"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="#374151"/>
+
+                        <Entry
+                            x:Name="EmailEntry"
+                            Placeholder="Enter email address"
+                            PlaceholderColor="#9CA3AF"
+                            TextColor="#111827"
+                            BackgroundColor="#F9FAFB"
+                            FontSize="16"
+                            Keyboard="Email"/>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- Age -->
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="Age"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="#374151"/>
+
+                        <Entry
+                            x:Name="AgeEntry"
+                            Placeholder="Enter age"
+                            PlaceholderColor="#9CA3AF"
+                            TextColor="#111827"
+                            BackgroundColor="#F9FAFB"
+                            FontSize="16"
+                            Keyboard="Numeric"/>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- Contact -->
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="Contact"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="#374151"/>
+
+                        <Entry
+                            x:Name="ContactEntry"
+                            Placeholder="03001234567"
+                            PlaceholderColor="#9CA3AF"
+                            TextColor="#111827"
+                            BackgroundColor="#F9FAFB"
+                            FontSize="16"
+                            Keyboard="Telephone"/>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- Specialization -->
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="Specialization"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="#374151"/>
+
+                        <Entry
+                            x:Name="SpecializationEntry"
+                            Placeholder="e.g. Cardiologist"
+                            PlaceholderColor="#9CA3AF"
+                            TextColor="#111827"
+                            BackgroundColor="#F9FAFB"
+                            FontSize="16"/>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- Experience -->
+
+                    <VerticalStackLayout Spacing="6">
+
+                        <Label
+                            Text="Experience"
+                            FontSize="14"
+                            FontAttributes="Bold"
+                            TextColor="#374151"/>
+
+                        <Entry
+                            x:Name="ExperienceEntry"
+                            Placeholder="Years of experience"
+                            PlaceholderColor="#9CA3AF"
+                            TextColor="#111827"
+                            BackgroundColor="#F9FAFB"
+                            FontSize="16"
+                            Keyboard="Numeric"/>
+
+                    </VerticalStackLayout>
+
+
+                    <!-- Error Message -->
+
+                    <Label
+                        x:Name="ErrorLabel"
+                        Text=""
+                        IsVisible="False"
+                        TextColor="#DC2626"
+                        FontSize="14"
+                        FontAttributes="Bold"/>
+
+
+                    <!-- Update Button -->
+
+                    <Button
+                        Text="Save Changes"
+                        Clicked="SaveChanges_Clicked"
+                        BackgroundColor="#1F3A93"
+                        TextColor="White"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        HeightRequest="52"
+                        CornerRadius="15"
+                        Margin="0,8,0,0"/>
+
+
+                    <!-- Cancel -->
+
+                    <Button
+                        Text="Cancel"
+                        Clicked="Back_Clicked"
+                        BackgroundColor="#E5E7EB"
+                        TextColor="#1F2937"
+                        FontSize="16"
+                        FontAttributes="Bold"
+                        HeightRequest="50"
+                        CornerRadius="15"/>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>

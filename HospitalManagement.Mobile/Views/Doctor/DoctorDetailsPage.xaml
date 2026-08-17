@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    x:Class="HospitalManagement.Mobile.Views.Doctor.DoctorDetailsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="Doctor Details"
+    BackgroundColor="#F5F7FB">
+
+    <ScrollView>
+
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="18">
+
+            <!-- Header -->
+
+            <Grid
+                ColumnDefinitions="Auto,*"
+                ColumnSpacing="14">
+
+                <Button
+                    Grid.Column="0"
+                    Text="‹"
+                    FontSize="30"
+                    FontAttributes="Bold"
+                    TextColor="#1F3A93"
+                    BackgroundColor="White"
+                    WidthRequest="48"
+                    HeightRequest="48"
+                    CornerRadius="14"
+                    Padding="0"
+                    Clicked="Back_Clicked"/>
+
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Spacing="2"
+                    VerticalOptions="Center">
+
+                    <Label
+                        Text="Doctor Details"
+                        FontSize="28"
+                        FontAttributes="Bold"
+                        TextColor="#1F2937"/>
+
+                    <Label
+                        Text="View doctor information"
+                        FontSize="14"
+                        TextColor="#6B7280"/>
+
+                </VerticalStackLayout>
+
+            </Grid>
+
+
+            <!-- Loading -->
+
+            <ActivityIndicator
+                x:Name="LoadingIndicator"
+                IsVisible="False"
+                IsRunning="False"
+                Color="#1F3A93"
+                HorizontalOptions="Center"/>
+
+
+            <!-- Doctor Profile Card -->
+
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                Padding="22"
+                StrokeShape="RoundRectangle 22">
+
+                <Border.Shadow>
+                    <Shadow
+                        Brush="#30000000"
+                        Offset="2,3"
+                        Radius="12"
+                        Opacity="0.18"/>
+                </Border.Shadow>
+
+                <VerticalStackLayout
+                    Spacing="12">
+
+                    <!-- Avatar -->
+
+                    <Border
+                        WidthRequest="82"
+                        HeightRequest="82"
+                        StrokeThickness="0"
+                        BackgroundColor="#E9F2FF"
+                        StrokeShape="RoundRectangle 41"
+                        HorizontalOptions="Center">
+
+                        <Label
+                            Text="👨‍⚕️"
+                            FontSize="42"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"/>
+                    </Border>
+
+
+                    <!-- Name -->
+
+                    <Label
+                        x:Name="NameLabel"
+                        Text="Doctor Name"
+                        FontSize="27"
+                        FontAttributes="Bold"
+                        TextColor="#111827"
+                        HorizontalTextAlignment="Center"/>
+
+                    <!-- Specialization -->
+
+                    <Border
+                        BackgroundColor="#E9F2FF"
+                        StrokeThickness="0"
+                        Padding="14,7"
+                        StrokeShape="RoundRectangle 15"
+                        HorizontalOptions="Center">
+
+                        <Label
+                            x:Name="SpecializationLabel"
+                            Text="Specialization"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="#1F4ACC"/>
+                    </Border>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+
+            <!-- Basic Information -->
+
+            <Label
+                Text="Basic Information"
+                FontSize="21"
+                FontAttributes="Bold"
+                TextColor="#1F2937"/>
+
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                Padding="20"
+                StrokeShape="RoundRectangle 20">
+
+                <VerticalStackLayout
+                    Spacing="18">
+
+                    <!-- Age -->
+
+                    <Grid ColumnDefinitions="Auto,*">
+
+                        <Label
+                            Grid.Column="0"
+                            Text="Age"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="#6B7280"/>
+
+                        <Label
+                            Grid.Column="1"
+                            x:Name="AgeLabel"
+                            Text="-"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            TextColor="#111827"
+                            HorizontalTextAlignment="End"/>
+
+                    </Grid>
+
+
+                    <!-- Experience -->
+
+                    <Grid ColumnDefinitions="Auto,*">
+
+                        <Label
+                            Grid.Column="0"
+                            Text="Experience"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="#6B7280"/>
+
+                        <Label
+                            Grid.Column="1"
+                            x:Name="ExperienceLabel"
+                            Text="-"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            TextColor="#111827"
+                            HorizontalTextAlignment="End"/>
+
+                    </Grid>
+
+
+                    <!-- Contact -->
+
+                    <Grid ColumnDefinitions="Auto,*">
+
+                        <Label
+                            Grid.Column="0"
+                            Text="Contact"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="#6B7280"/>
+
+                        <Label
+                            Grid.Column="1"
+                            x:Name="ContactLabel"
+                            Text="-"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            TextColor="#111827"
+                            HorizontalTextAlignment="End"/>
+
+                    </Grid>
+
+
+                    <!-- Email -->
+
+                    <Grid ColumnDefinitions="Auto,*">
+
+                        <Label
+                            Grid.Column="0"
+                            Text="Email"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="#6B7280"/>
+
+                        <Label
+                            Grid.Column="1"
+                            x:Name="EmailLabel"
+                            Text="-"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            TextColor="#111827"
+                            HorizontalTextAlignment="End"/>
+
+                    </Grid>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+
+            <!-- System Information -->
+
+            <Label
+                Text="Record Information"
+                FontSize="21"
+                FontAttributes="Bold"
+                TextColor="#1F2937"/>
+
+            <Border
+                BackgroundColor="White"
+                StrokeThickness="0"
+                Padding="20"
+                StrokeShape="RoundRectangle 20">
+
+                <VerticalStackLayout
+                    Spacing="18">
+
+                    <Grid ColumnDefinitions="Auto,*">
+
+                        <Label
+                            Grid.Column="0"
+                            Text="Created By"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="#6B7280"/>
+
+                        <Label
+                            Grid.Column="1"
+                            x:Name="CreatedByLabel"
+                            Text="-"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            TextColor="#111827"
+                            HorizontalTextAlignment="End"/>
+
+                    </Grid>
+
+
+                    <Grid ColumnDefinitions="Auto,*">
+
+                        <Label
+                            Grid.Column="0"
+                            Text="Created At"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="#6B7280"/>
+
+                        <Label
+                            Grid.Column="1"
+                            x:Name="CreatedAtLabel"
+                            Text="-"
+                            FontSize="15"
+                            FontAttributes="Bold"
+                            TextColor="#111827"
+                            HorizontalTextAlignment="End"/>
+
+                    </Grid>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+
+            <!-- Actions -->
+
+            <VerticalStackLayout
+                Spacing="12"
+                Margin="0,5,0,20">
+
+                <Button
+                    Text="✎  Edit Doctor"
+                    Clicked="EditDoctor_Clicked"
+                    BackgroundColor="#1F3A93"
+                    TextColor="White"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    HeightRequest="50"
+                    CornerRadius="15"/>
+
+                <Button
+                    Text="Delete Doctor"
+                    Clicked="DeleteDoctor_Clicked"
+                    BackgroundColor="#DC2626"
+                    TextColor="White"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    HeightRequest="50"
+                    CornerRadius="15"/>
+
+                <Button
+                    Text="Back to Doctors"
+                    Clicked="Back_Clicked"
+                    BackgroundColor="#E5E7EB"
+                    TextColor="#1F2937"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    HeightRequest="50"
+                    CornerRadius="15"/>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>

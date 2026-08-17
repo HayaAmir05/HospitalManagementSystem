@@ -1,5 +1,4 @@
 @model HospitalManagemenet.Models.Doctor
-
 @{
     ViewData["Title"] = "Delete";
 }
@@ -59,7 +58,7 @@
     </dl>
    
   
-    <form asp-action="Delete">
+    <form asp-action="Delete"  method="post">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> 
          <br />
